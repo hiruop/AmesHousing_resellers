@@ -1,0 +1,158 @@
+---
+title: "Final Project (Proposal)-Property Resaller"
+author: "Hiren Shaileshbhai Patel Student ID:- 797548"
+date: "12/10/2021"
+output: html_document
+---
+
+## **STATEMENT OF ACKNOWLEDMENT:-**
+
+I Hiren Shaileshbhai Patel, hereby state that I have not communicated with or gained information in any way from any person or resource that would violate the College's academic integrity policies, and that all work presented is my own.
+In addition, I also agree not to share my work in any way, before or after submission, that would violate the College's academic integrity policies
+
+### **Project Proposal:-**
+
+\~\>A high mean sale price will attract big spenders once the project is complete, but if all of the houses in the neighborhood are expensive The Friendly Flippers will not be able to turn a profit.
+The Friendly Flippers can maximize their profit by investing in a neighborhood that also has a high variance in sale price.
+A high varince in sale price will ensure that the sale prices are distributed along a wide range, so The Friendly Flippers can find a budget-friendly house in an expensive neighborhood.
+Once the project is complete, they'll be able to sell the house for top dollar!
+
+\~\>In some months, demand for houses is higher than others.
+If demand for houses is high, buyers bid higher, and houses sell for more.
+The Friendly Flippers use hypothesis testing to identify the months that have statistically higher demand for houses.
+If their project concludes in a month with high demand, they'll be able to sell the house at a higher price.
+
+### Dataset: **ames housing resellers**
+
+Dataset Description: The Ames housing dataset can be found in the AmesHousing package.
+Each observation in the dataset represents one house.
+Eighty-one variables describe each house in the dataset.
+The Friendly Flippers only need three of those variables to complete their analysis: Neighborhood, SalePrice, and Mo.Sold.
+Let's take a quick look at the data.
+
+### **Variable type:** numeric
+
+Lot.Frontage:- Front area of lot\n
+
+Lot.Area:- Lot total area \n 
+
+Year.Built:- year which it was built \n 
+
+Year.Remod.Add:- advertisement year \n 
+
+BsmtFin.SF.1:- surface area of Basement finished\n 
+
+BsmtFin.SF.2:- surface area of another Basement finished \n 
+
+Bsmt.Unf.SF:- surface area of unfinished basement \n 
+
+Total.Bsmt.SF:- Total basement surface area \n 
+
+First.Flr.SF:- First floor surface area\n 
+
+Second.Flr.SF:- second floor surface area \n 
+
+Gr.Liv.Area:- living area on the ground floor \n 
+
+Bsmt.Full.Bath:- size of bathroom in basement\n 
+
+Bedroom.AbvGr:- bedrooms at the ground floor\n 
+
+Kitchen.AbvGr:- kitchen at the ground floor\n 
+
+TotRms.AbvGrd:- total rooms at the ground floor\n 
+
+Fireplaces:- number of fireplaces \n 
+
+Garage.Cars:- cars space in garage \n 
+
+Garage.Area:- total garage area \n 
+
+Wood.Deck.SF:- wood deck surface \n 
+
+Open.Porch.SF:- open porch surface \n 
+
+Enclosed.Porch:- closed porch surface \n 
+
+Pool.Area:- size of pool \n 
+
+Mo.old:- month of house was sold \n 
+
+Yr.sold: -year of house was sold\n 
+
+SalePrice:- price of house \n 
+
+Longitude:- lonitude of the given location \n 
+
+Latitude:- latitude of the given location\n
+
+## **Data Analysis Plan**
+
+### **Research Questions**
+
+What are the total rooms a house have?
+
+what is the total area of a lot?
+
+what is the surface area of total basement?
+
+How much garage area a house has?
+
+How many cars a garage can store?
+
+what is the size of full bathroom has?
+
+what is the average sell price a house?
+
+In which year the house was sold?
+
+In which month the house was sold?
+
+what is total area of a living rooms?
+
+How many houses has the fireplaces?
+
+what is the size of the kitchen in a house?
+
+Do the house have central Airconditoner or not?
+
+Do the house has heating facilities?
+
+How is the extirior of the house?
+
+Which roof style a house has?
+
+```{r}
+ames <- read.csv("C:/Users/Admin/Desktop/DAB501/Data/ames.csv", header = TRUE)
+```
+
+**Head of the Dataset**
+
+```{r}
+head(ames)
+```
+
+**Tail of the Dataset**
+
+```{r}
+tail(ames)
+```
+
+**Summary of the Dataset**
+
+```{r}
+summary(ames)
+```
+
+**Describe the Dataset**
+
+```{r}
+psych::describe(ames)
+```
+
+### **Glimpse of Data**
+
+```{r}
+library(dplyr)
+glimpse(ames)
+```

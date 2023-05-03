@@ -1,0 +1,341 @@
+---
+title: "Final Project- Property Resaller"
+author: "Hiren Shaileshbhai Patel,                                                        Student ID:- 797548"
+date: "12/5/2021"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+library(dplyr)
+```
+
+```{r}
+library(ggplot2)
+ames <- read.csv("C:/Users/Admin/Downloads/ames.csv", header = TRUE)
+```
+
+```{r}
+head(ames)
+```
+
+```{r}
+ames %>% drop_na(Yr.Sold,SalePrice) %>%
+  group_by(Yr.Sold) %>% 
+  summarize(mean_SalePrice = round(mean(SalePrice))) 
+```
+
+Response Variable:-
+
+```{r}
+summary(ames$SalePrice)
+```
+
+```{r}
+y=rnorm(ames$SalePrice)
+hist(y,main="General Distribution", col="red")
+```
+
+```{r}
+print(paste0("IQR: ", IQR(ames$SalePrice)))
+```
+
+```{r}
+Out = 213500 + 1.5 * (84000) 
+
+print(paste0("Out = 213500 + 1.5 * (84000) which is ", Out))
+```
+
+Here, Mean \> Median so it is right/positive skewed.
+Moderately skewed.
+
+Modeling
+
+```{r}
+ames <- ames %>% 
+  mutate(Total.Area = Gr.Liv.Area+Garage.Area+X1st.Flr.SF,Total.Bsmt.SF,
+         Total.Year = Yr.Sold - Year.Remod.Add)
+```
+
+```{r}
+tt_n <- ames %>% 
+  mutate(Total_Area = Gr.Liv.Area+Garage.Area+X1st.Flr.SF,Total.Bsmt.SF,
+         Total_Year = Yr.Sold - Year.Remod.Add)
+```
+
+Year Vs Sale Price
+
+```{r}
+ggplot(tt_n,
+       aes(x = Total.Year, y = SalePrice)) +
+  geom_point(alpha=0.3)+
+  scale_y_continuous(labels = scales::comma)+
+labs(title = "Distribution of total year with Sale price ($)",x = "Total Years",y = "Sale Price")+
+  geom_smooth(method = "lm", se = F)+
+   theme_classic()
+```
+
+Total Area Vs Sale Price
+
+```{r}
+ggplot(tt_n,
+       aes(x = Total.Area, y = SalePrice)) +
+  geom_point(alpha=0.3)+
+  scale_y_continuous(labels = scales::comma)+
+labs(title = "Distribution of Total area with Sale price",x = " Total Area",y = "Sale Price($)")+
+  geom_smooth(method = "lm", se = F)+
+   theme_classic()
+```
+
+Total rooms Vs Sale Price
+
+```{r}
+ggplot(tt_n,
+       aes(x = TotRms.AbvGrd, y = SalePrice)) +
+  geom_point(alpha=0.3)+
+  scale_y_continuous(labels = scales::comma)+
+labs(title = "Distribution of total Rooms with Sale price",x = "Total Rooms",y = "Sale Price")+
+  geom_smooth(method = "lm", se = F)+
+   theme_classic()
+```
+
+Univariate Plots:-
+
+```{r}
+Br <- ames %>% count(Bedroom.AbvGr)
+Br <- na.omit(Br)
+
+ggplot(Br,
+       aes(x = Bedroom.AbvGr,y = n)) +
+  geom_bar(stat="identity",fill = "Pink2")+
+  geom_text(aes(label = n), vjust = 0)+
+labs(title = "Bar Graph for number of bedrooms",x = "Number of Bedrooms",y = "Number of Houses")+
+  theme_classic()
+```
+
+From this plot, we can see that Most houses have 3 bedrooms and very rare house with eight bedrooms.
+
+```{r}
+Bt <- ames %>% count(Full.Bath)
+Bt <- na.omit(Bt)
+
+ggplot(Bt,
+       aes(x = Full.Bath,y = n)) +
+  geom_bar(stat = "identity",fill = "skyblue2")+
+  geom_text(aes(label = n), vjust = 0)+
+labs(title = "Bar Graph for number of bathrooms",x = "Number of Bathrooms",y = "Count of Houses")+ 
+theme_classic()
+
+```
+
+From this plot, we can see that Most houses have 2 bathrooms and only 12 houses with no bathrooms.
+
+```{r}
+Gc <- ames %>% count(Garage.Cars)
+Gc <- na.omit(Gc)
+
+ggplot(Gc,
+       aes(x = Garage.Cars,y = n)) +
+  geom_bar(stat = "identity",fill = "yellow")+
+  geom_text(aes(label = n), vjust = 0)+
+labs(title = "Bar Graph for size of garage by car capacity",x = "Car Capacity in garage",y = "Count of Houses")+
+   theme_classic()
+```
+
+From this plot, we can see that highest number of houses has the capacity of 2 cars.
+
+```{r}
+Tr <- ames %>% count(TotRms.AbvGrd)
+Tr <- na.omit(Tr)
+
+ggplot(Tr,
+       aes(x = TotRms.AbvGrd,y = n)) +
+  geom_bar(stat = "identity",fill = "blue2")+
+  geom_text(aes(label = n), vjust = 0)+
+labs(title = "Bar Graph for Total Rooms",x = "Number of total rooms",y = "Count of Houses")+
+   theme_classic()
+```
+
+From this plot, we can see that there are more number of houses with total 6 rooms and the counts of houses declines gradually as the total number of rooms tends to increase.
+
+```{r}
+Kt <- ames %>% count(Kitchen.AbvGr)
+Kt <- na.omit(Kt)
+
+ggplot(Kt,
+       aes(x = Kitchen.AbvGr,y = n)) +
+  geom_bar(stat="identity",fill = "skyblue")+
+  geom_text(aes(label = n), vjust = 0)+
+labs(title = "Bar Graph for number of kitchens",x = "Number of Kitchens",y = "Count of Houses")+
+theme_classic()
+```
+
+From this plot, we can see that there are most common houses with 1 kitchen in the house.
+
+```{r}
+Fp <- ames %>% count(Fireplaces)
+Fp<- na.omit(Fp)
+
+ggplot(Fp,
+       aes(x = Fireplaces,y = n)) +
+  geom_bar(stat="identity",fill = "purple")+
+  geom_text(aes(label = n), vjust = 0)+
+labs(title = "Bar Graph for number of Fireplaces",x = "Number of Fireplaces",y = "Count of Houses")+
+ theme_classic()
+
+```
+
+From this plot, we can see that there are many houses with no fireplaces and very few houses have more than 1 fireplace.
+
+```{r}
+library(ggplot2)
+
+Sp <- ames %>% count(SalePrice)
+Sp <- na.omit(Sp)
+
+ggplot(Sp,
+       aes(x = SalePrice)) +
+  geom_histogram(fill = "red2",bins=40,color="black")+
+  scale_x_continuous(labels = scales::comma)+
+  geom_vline(aes(xintercept=mean(SalePrice)),
+             color="green")+
+labs(title = "Histogram for Sale Price",x = "Sale Price (in $)",y = "Count of Houses")+
+ theme_classic()
+```
+
+From this plot, we can see that graph for Sale Price is right skewed and unmoral.Rising with the amount of \$200000, the number of houses declines as it gets expensive.
+
+```{r}
+print(paste0("Mean : ","$", round(mean(Sp$SalePrice))))
+```
+
+```{r}
+ggplot(Sp,
+       aes(x = SalePrice)) +
+  geom_boxplot()+
+  scale_x_continuous(labels = scales::comma)+
+labs(title = "Box Plot for Sale Price",x = "Sale Price")+
+theme_classic()
+```
+
+```{r}
+library(ggplot2)
+Yr <- ames %>% count(Yr.Sold)
+Yr <- na.omit(Yr)
+
+ggplot(Yr,
+       aes(x = Yr.Sold,y=n)) +
+  geom_col(fill = "green4")+
+  geom_text(aes(label = n), vjust = 0)+
+labs(title = "Counts of houses sold each year",x = "Year",y = "Count of Houses")+
+ theme_classic()
+
+```
+
+From the graph,for the year 2006 and 2008 the sales of houses remains almost same while maximum houses were sold in the year 2007 and the least houses were sold in the year 2010.
+
+Bivariate plots:-
+
+```{r}
+lot_out <- ames %>% filter(Lot.Area<100000)
+
+ggplot(lot_out,
+       aes(x = Lot.Area, y = SalePrice)) +
+  geom_point(alpha=0.4)+
+  scale_y_continuous(labels = scales::comma)+
+  geom_smooth(method = "lm", se = F)+
+labs(title = "Distribution of lot area with sale price",x = "Lot Area (in sq ft)",y = "Sale Price (in $)")+
+   theme_classic()
+```
+
+```{r}
+print(paste0("Correlation : ",cor(lot_out$SalePrice,lot_out$Lot.Area)))
+```
+
+Sale price and lot area shows positive,linear and moderately strong relationship.Meaning,as the lot area increases,sale price tends to increase.
+
+```{r}
+ggplot(ames,
+       aes(x = Bedroom.AbvGr, y = Full.Bath)) +
+  geom_point()+
+  geom_smooth(method = "lm", se = F)+
+labs(title = "Distribution of number of bathrooms with number of bedrooms",x = "Number of Bedrooms",y = "Number of Bathrooms")+
+   theme_classic()
+```
+
+```{r}
+print(paste0("Correlation : ", cor(ames$Bedroom.AbvGr,ames$Full.Bath)))
+```
+
+The graph between Number of bedrooms and Number of Bathrooms shows linear and slightly positive trend with little weak relationship.
+
+```{r}
+ggplot(ames,
+       aes(x = TotRms.AbvGrd, y = Gr.Liv.Area)) +
+  geom_point(alpha=0.3)+
+labs(title = "Distribution of living area with total number of rooms",x = "Total Rooms",y = "Living Area in (sq ft)")+
+  geom_smooth(method = "lm", se = F)+
+   theme_classic()
+```
+
+```{r}
+print(paste0("Correlation : ", cor(ames$TotRms.AbvGrd,ames$Gr.Liv.Area)))
+```
+
+The graph between Living area (in sq ft) and total rooms shows linear and positive trend with a strong relationship.
+
+```{r}
+ggplot(ames,
+       aes(x = X1st.Flr.SF, y = SalePrice)) +
+  geom_point(alpha=0.3)+
+   scale_y_continuous(labels = scales::comma)+
+  geom_smooth(method = "lm", se = F)+
+labs(title = " Distribution of First Floor Area with sales price ", x = " First Floor Area (in sq ft) ", y = " Sale Price ($) ")+
+   theme_classic()
+```
+
+```{r}
+print(paste0("Correlation : ", cor(ames$X1st.Flr.SF,ames$SalePrice)))
+```
+
+Multivariate:-
+
+```{r}
+ggplot(data = ames,aes(x = TotRms.AbvGrd, y = Bedroom.AbvGr)) +
+  geom_point(alpha=0.3) +
+  facet_grid(Kitchen.AbvGr ~. )+
+  geom_smooth(method = "lm", se = F)+
+  labs(title="Total rooms by number of bedrooms and kitchens",x="Total Rooms",y="Number of Bedrooms")+
+   theme_classic()
+```
+
+```{r}
+ggplot(data = ames) +
+  geom_point(mapping = aes(x = TotRms.AbvGrd, y = Lot.Area),alpha=0.3) +
+  facet_wrap(~ Fireplaces)+
+  labs(title = "Total rooms by lot area",x="Total rooms",y="Lot Area (in sq ft)")+
+   theme_classic()
+```
+
+```{r}
+ggplot(ames,
+       aes(x = TotRms.AbvGrd, y = log10(SalePrice),color=Yr.Sold)) +
+  geom_point(alpha=0.3)+
+labs(title = "Distribution of total number of rooms with the sales price",x = "Total Rooms",y = "Sales Price")+
+  geom_smooth(method = "lm", se = F)+
+   theme_classic()
+```
+
+```{r}
+ggplot(ames,
+       aes(x = TotRms.AbvGrd, y = (SalePrice),color=Yr.Sold) )+
+  geom_point(alpha=0.3)+
+labs(title = "Distribution of total number of rooms with the sales price",x = "Total Rooms",y = "Sales Price")+
+  scale_y_continuous(labels = scales::comma)+
+   geom_smooth(method = "lm", se = F)+
+   facet_wrap(~Yr.Sold )+
+   theme_classic()
+```
